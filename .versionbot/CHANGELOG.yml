@@ -1,4 +1,21 @@
 - commits:
+    - subject: 'u-boot: Enable autoboot stop for bbgw dev images'
+      hash: e34acee89b8e642f67107d8fec1c98ea553b4d51
+      body: |
+        We may sometimes need to debug or
+        work on u-boot in development images.
+
+        Let's enable autoboot stop on development
+        images.
+      footer:
+        Changelog-entry: 'u-boot: Enable autoboot stop for bbgw dev images'
+        changelog-entry: 'u-boot: Enable autoboot stop for bbgw dev images'
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru Costache
+  version: 2.47.1+rev3
+  date: 2020-03-11T21:03:56.352Z
+- commits:
     - subject: 'linux-beagleboard: Prevent kernel panic if rtc failed'
       hash: 68a20488c858b5d35177f36376c0ae0851fc1cb4
       body: |
