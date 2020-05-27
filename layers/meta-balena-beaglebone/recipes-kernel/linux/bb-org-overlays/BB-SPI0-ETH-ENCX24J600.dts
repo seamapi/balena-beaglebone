@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2020 Eric Waugh
+ *
+ * ENX24J600 virtual cape on SPI0 (connector pins P9.22 P9.21 P9.18 P9.17), and an interrupt on GPIO115 [GPIO3_19] (P9.27)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/board/am335x-bbw-bbb-base.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/am33xx.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+	compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
+
+	/* identification */
+	part-number = "ENCX24J600-SPI0";
+	version = "00A0";
+
+	/* state the resources this cape uses */
+	exclusive-use =
+		/* the pin header uses */
+		"P9.27",	/* gpio_115 interrupt */
+		"P9.17",	/* spi0_cs0 */
+		"P9.18",	/* spi0_d1 */
+		"P9.21",	/* spi0_d0 */
+		"P9.22",	/* spi0_sclk */
+		/* the hardware ip uses */
+		"spi0";
+
+	fragment@0 {
+		target = <&am33xx_pinmux>;
+		__overlay__ {
+			encx24j600_pins: pinmux_encx24j600_pin {
+				pinctrl-single,pins = <
+                                       AM33XX_IOPAD(0x09a4, PIN_OUTPUT_PULLUP | INPUT_EN | MUX_MODE7) /* mcasp0_fsr.gpio3_19 */
+				>;
+                        };
+			
+			bb_spi0_pins: pinmux_bb_spi0_pins {
+				pinctrl-single,pins = <
+                                       AM33XX_IOPAD(0x095c, PIN_OUTPUT_PULLUP | INPUT_EN | MUX_MODE0)    /* spi0_cs0.spi0_cs0 */
+                                       AM33XX_IOPAD(0x0958, PIN_OUTPUT_PULLUP | INPUT_EN | MUX_MODE0)    /* spi0_d1.spi0_d1 */
+                                       AM33XX_IOPAD(0x0954, PIN_OUTPUT_PULLUP | INPUT_EN | MUX_MODE0)    /* spi0_d0.spi0_d0 */
+                                       AM33XX_IOPAD(0x0950, PIN_OUTPUT_PULLUP | INPUT_EN | MUX_MODE0)    /* spi0_sclk.spi0_sclk */
+				>;
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+
+			status = "okay";
+			pinctrl-names = "default";
+			pinctrl-0 = <&bb_spi0_pins>;
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			encx24j600: ethernet@0 {
+				compatible = "encx24j600";
+				pinctrl-names = "default";
+				pinctrl-0 = <&encx24j600_pins>;
+				reg = <0x0>;
+				interrupt-parent = <&gpio3>;
+				interrupts = <19 IRQ_TYPE_EDGE_FALLING>;
+				spi-max-frequency = <14000000>;
+			};
+		};
+	};
+};

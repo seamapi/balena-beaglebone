@@ -16,6 +16,7 @@ SRC_URI = " \
     file://BB-I2C2N-00A0.dts \
     file://SDS-CAPE-00A0.dts \
     file://BB-UART4-RTSCTS-00A0.dts \
+    file://BB-SPI0-ETH-ENCX24J600.dts \
     "
 
 S = "${WORKDIR}/git"
@@ -30,6 +31,7 @@ do_compile_prepend () {
     cp ${WORKDIR}/BB-I2C2N-00A0.dts ${S}/src/arm/
     cp ${WORKDIR}/SDS-CAPE-00A0.dts ${S}/src/arm/
     cp ${WORKDIR}/BB-UART4-RTSCTS-00A0.dts ${S}/src/arm/
+    cp ${WORKDIR}/BB-SPI0-ETH-ENCX24J600.dts ${S}/src/arm/
 }
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
