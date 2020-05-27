@@ -68,7 +68,7 @@ sudo apt-get install npm jq
 ```
 mkdir ~/workspace; cd ~/workspace/ # or where you want the build to live
 
-git clone https://github.com/balena-os/balena-beaglebone
+git clone <this-repo-url>
 
 cd balena-beaglebone
 
