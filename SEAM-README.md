@@ -74,7 +74,7 @@ cd balena-beaglebone
 
 git submodule update --init --recursive
 
-git checkout v2.47.1+rev2 --recurse-submodules
+git checkout develop/v2.47.1+rev2+seam --recurse-submodules
 ```
 
 # Build that OS Image
