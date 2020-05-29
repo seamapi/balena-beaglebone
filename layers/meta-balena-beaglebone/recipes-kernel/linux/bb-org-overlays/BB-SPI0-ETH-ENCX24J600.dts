@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Eric Waugh
+ * Copyright (C) 2020 Halcyon Labs Inc.
  *
  * ENX24J600 virtual cape on SPI0 (connector pins P9.22 P9.21 P9.18 P9.17), and an interrupt on GPIO115 [GPIO3_19] (P9.27)
  *
