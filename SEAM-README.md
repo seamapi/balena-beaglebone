@@ -5,8 +5,8 @@ Take a look at this: [https://www.balena.io/os/docs/custom-build/](https://www.b
 
   
 # Hardware Requirements  
-- A [compatible](http://www.yoctoproject.org/docs/3.1/ref-manual/ref-manual.html#hardware-build-system-term) Linux distrobution
-- At least 50GB of free disk space
+- A [compatible](http://www.yoctoproject.org/docs/3.1/ref-manual/ref-manual.html#hardware-build-system-term) Linux distribution
+- At least 50GB of free disk space.
 - More CPU, more RAM the better. 16GB RAM and 4 CPU cores recommended.
 - Network interface to the outside world.
 
@@ -59,9 +59,7 @@ build-essential chrpath socat cpio python3 python3-pip python3-pexpect \
 
 xz-utils debianutils iputils-ping python3-git python3-jinja2 \
 
-libegl1-mesa libsdl1.2-dev pylint3 xterm
-
-sudo apt-get install npm jq
+libegl1-mesa libsdl1.2-dev pylint3 xterm npm jq
 ```
 
 # Setup Build Area
@@ -83,11 +81,12 @@ git checkout develop/v2.47.1+rev2+seam --recurse-submodules
 `newgrp docker` first.
 
 ### First Build
-- Run `./balena-yocto-scripts/build/barys -d --dry-run`
--   Edit `build/conf/local.conf` and adjust the following:
-	- `MACHINE=beaglebone-green-wifi`
-	- `DEVELOPMENT_IMAGE = "1"`
+- Run `./balena-yocto-scripts/build/barys -d --dry-run`. **Omit the -d option for production images.**
+- Edit `build/conf/local.conf` and adjust the following:
+	- `MACHINE = beaglebone-green-wifi`
+	- `DEVELOPMENT_IMAGE = "1"` **Set me to "0" for production images.**
 	- `RESIN_RAW_IMG_COMPRESSION = "xz"`
+- Do the steps in the below section "Incremental Builds"
     
 ### Incremental Builds
 - Setup the shell environment with:
@@ -105,8 +104,21 @@ Wait for success.
   
 # Installing Images to the Target Device
 - The resulting image will reside at: `balena-beaglebone/build/tmp/deploy/images/beaglebone-green-wifi/resin-image-flasher-beaglebone-green-wifi-<timestamp>.rootfs.resinos-img.xz`
-- Use Etcher or the Balena CLI to flash the device. CLI example: `sudo balena local flash <path-to-flasher-image>`
-- To make the device talk to your Balena Cloud account to install the `config.json` file associated with the Balena account / app and app on the `boot` partition of the SD card. The `config.json` file can be generated with the Balena CLI: `balena config generate --app <balena-cloud-app-name> --version <os-version>`. See [usage]([https://www.balena.io/docs/reference/balena-cli/#config-generate](https://www.balena.io/docs/reference/balena-cli/#config-generate)) for details.
+## Setting Up an SD Card for Flashing
+- Preload apps onto the OS image. This can be skipped, but the container download once the device is booted will take a while. It's also undesirable for production.
+	- Decompress the OS image: `unxz resin-image-flasher-beaglebone-green-wifi-<timestamp>.rootfs.resinos-img.xz`.
+	- Run the preload command: `balena preload --app <balena-cloud-app-name> --commit <"current"|hash> resin-image-flasher-beaglebone-green-wifi-<timestamp>.rootfs.resinos-img`. The `--app` and `--commit` options can be skipped for an interactive preload.
+- Use Etcher or the Balena CLI to flash the SD Card.
+	- CLI example: `sudo balena local flash <path-to-flasher-image>`
+- To make the device talk to your Balena Cloud account you will need to create a `config.json` file associated with the Balena account / app. This file can be generated with the Balena CLI: `balena config generate --app <balena-cloud-app-name> --version <os-version>`. See [usage]([https://www.balena.io/docs/reference/balena-cli/#config-generate](https://www.balena.io/docs/reference/balena-cli/#config-generate)) for details.
+- Once the `config.json` has been created, one can write it to the newly flashed SD Card with: `sudo balena config inject <path-to>/config.json --type beaglebone-green-wifi`
+## Use the SD Card to Write the Internal Flash
+- Insert SD card
+- Hold down the "USER" button and power on
+- Wait for the LEDs to stop flashing (a few minutes)
+- Remove SD card
+- Reboot
+- If network is available, the device should appear in Balena Cloud within a few minutes.
 
 # Useful Tips for the Target Device
 ##### Editing OS Config Files to Persist on Reboot
