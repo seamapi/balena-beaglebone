@@ -111,7 +111,8 @@ Wait for success.
 - Use Etcher or the Balena CLI to flash the SD Card.
 	- CLI example: `sudo balena local flash <path-to-flasher-image>`
 - To make the device talk to your Balena Cloud account you will need to create a `config.json` file associated with the Balena account / app. This file can be generated with the Balena CLI: `balena config generate --app <balena-cloud-app-name> --version <os-version> --output config.json`. See [usage]([https://www.balena.io/docs/reference/balena-cli/#config-generate](https://www.balena.io/docs/reference/balena-cli/#config-generate)) for details. Here the `--version` argument should be `v2.47.1+rev2`.
-- Once the `config.json` has been created, one can write it to the newly flashed SD Card with: `sudo -E balena config inject <path-to>/config.json --type beaglebone-green-wifi`
+- Once the `config.json` has been created, one can write it to the newly flashed SD Card with: `sudo -E balena config inject <path-to>/config.json --type beaglebone-green-wifi`. Note the name of the drive. E.g. /dev/sda
+- Make sure to unmount the flash device cleanly, use the correct drive name from above. I.e. `sudo umount /dev/sda*`
 ## Use the SD Card to Write the Internal Flash
 - Insert SD card
 - Hold down the "USER" button and power on
