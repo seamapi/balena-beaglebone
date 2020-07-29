@@ -114,11 +114,14 @@ Wait for success.
 - Once the `config.json` has been created, one can write it to the newly flashed SD Card with: `sudo -E balena config inject <path-to>/config.json --type beaglebone-green-wifi`. Note the name of the drive. E.g. /dev/sda
 - Make sure to unmount the flash device cleanly, use the correct drive name from above. I.e. `sudo umount /dev/sda*`
 ## Use the SD Card to Write the Internal Flash
+Follow the below exactly. Varying from the below sequence may cause the device to hang (no flashing LEDs).
 - Insert SD card
-- Hold down the "USER" button and power on
-- Wait for the LEDs to stop flashing (a few minutes)
+- Insert power
+- Hold down the "USER" button
+- Tap the "RESET" button
+- Wait for the LEDs to stop flashing (a few minutes). All LEDs will turn off.
 - Remove SD card
-- Reboot
+- Reboot, by tapping the "RESET" button
 - If network is available, the device should appear in Balena Cloud within a few minutes.
 
 # Useful Tips for the Target Device
